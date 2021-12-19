@@ -2,7 +2,7 @@
 //  MovieListViewModel.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
@@ -13,17 +13,15 @@ class MovieListViewModel: ObservableObject {
     @Published var movies = [MovieViewModel]()
     
     func deleteMovie(movie: MovieViewModel) {
-        let movie: Movie? = Movie.byId(id: movie.id)
+        let movie: Movie? = Movie.byId(id: movie.movieId)
         if let movie = movie {
-            movie.delete()
+            try? movie.delete()
         }
     }
     
     func getAllMovies() {
-        
-        let movies: [Movie] = Movie.all()
         DispatchQueue.main.async {
-            self.movies = movies.map(MovieViewModel.init)
+            self.movies = Movie.all().map(MovieViewModel.init)
         }
     }
 }
@@ -32,7 +30,7 @@ struct MovieViewModel {
     
     let movie: Movie
     
-    var id: NSManagedObjectID {
+    var movieId: NSManagedObjectID {
         return movie.objectID
     }
     

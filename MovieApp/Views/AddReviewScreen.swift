@@ -2,7 +2,7 @@
 //  AddReviewScreen.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import SwiftUI
@@ -37,7 +37,7 @@ struct AddReviewScreen: View {
 struct AddReviewScreen_Previews: PreviewProvider {
     static var previews: some View {
         
-        let movie = MovieViewModel(movie: Movie(context: CoreDataProvider.shared.viewContext))
+        let movie = MovieViewModel(movie: Movie(context: CoreDataManager.shared.viewContext))
         AddReviewScreen(movie: movie)
     }
 }

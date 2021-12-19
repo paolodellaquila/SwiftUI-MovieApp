@@ -2,15 +2,26 @@
 //  MovieListScreen.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import SwiftUI
 
+enum Sheets: Identifiable {
+    
+    var id: UUID {
+        return UUID()
+    }
+    
+    case addMovie
+    case showFilters
+}
+
 struct MovieListScreen: View {
     
     @StateObject private var movieListVM = MovieListViewModel()
-    @State private var isPresented: Bool = false
+    @State private var activeSheet: Sheets?
+    @State private var filterApplied: Bool = false
     
     private func deleteMovie(at indexSet: IndexSet) {
         indexSet.forEach { index in
@@ -23,31 +34,54 @@ struct MovieListScreen: View {
     }
     
     var body: some View {
-        List {
+        VStack {
+            HStack {
+                Button("Reset") {
+                    movieListVM.getAllMovies()
+                }.padding()
+                Spacer()
+                Button("Filter") {
+                    filterApplied = true
+                    activeSheet = .showFilters
+                }
+            }.padding(.trailing, 40)
             
-            ForEach(movieListVM.movies, id: \.id) { movie in
-                NavigationLink(
-                    destination: ReviewListScreen(movie: movie),
-                    label: {
-                        MovieCell(movie: movie)
-                    })
-            }.onDelete(perform: deleteMovie)
+            List {
+                
+                ForEach(movieListVM.movies, id: \.movieId) { movie in
+                    NavigationLink(
+                        destination: MovieDetailScreen(movie: movie),
+                        label: {
+                            MovieCell(movie: movie)
+                        })
+                }.onDelete(perform: deleteMovie)
+                
+            }.listStyle(PlainListStyle())
             
-        }.listStyle(PlainListStyle())
-        .navigationTitle("Movies")
-        .navigationBarItems(trailing: Button("Add Movie") {
-            isPresented = true 
+            .navigationTitle("Movies")
+            .navigationBarItems(trailing: Button("Add Movie") {
+                activeSheet = .addMovie
+            })
+            .sheet(item: $activeSheet, onDismiss: {
+                if(!filterApplied) {
+                    movieListVM.getAllMovies()
+                }
+            }, content: { item in
+                switch item {
+                    case .addMovie:
+                        AddMovieScreen()
+                    case .showFilters:
+                        ShowFiltersScreen(movies: $movieListVM.movies)
+                }
+            })
+            .onAppear(perform: {
+                UITableView.appearance().separatorStyle = .none
+                UITableView.appearance().separatorColor = .clear
+                if !filterApplied {
+                    movieListVM.getAllMovies()
+                }
         })
-        .sheet(isPresented: $isPresented, onDismiss: {
-            movieListVM.getAllMovies()
-        },  content: {
-            AddMovieScreen()
-        })
-        .embedInNavigationView()
-        
-        .onAppear(perform: {
-            movieListVM.getAllMovies()
-        })
+        }.embedInNavigationView()
     }
 }
 
@@ -68,13 +102,26 @@ struct MovieCell: View {
             VStack(alignment: .leading, spacing: 5) {
                 Text(movie.title)
                     .fontWeight(.bold)
+                    .font(.system(size: 22))
                 Text(movie.director)
-                    .font(.caption2)
+                    .font(.callout)
+                    .opacity(0.5)
                 Text(movie.releaseDate ?? "")
-                    .font(.caption)
+                    .font(.callout)
+                    .opacity(0.8)
+                Spacer()
+                
             }
             Spacer()
-            RatingView(rating: .constant(movie.rating))
+            HStack {
+                Image(systemName: "star.fill")
+                    .foregroundColor(.yellow)
+                Text("\(movie.rating!)")
+            }
         }
+        .padding()
+        .foregroundColor(Color.black)
+        .background(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9567790627, green: 0.9569163918, blue: 0.9567491412, alpha: 1)), Color(#colorLiteral(red: 0.9685427547, green: 0.9686816335, blue: 0.9685124755, alpha: 1))]), startPoint: .leading, endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/))
+        .clipShape(RoundedRectangle(cornerRadius: 15.0, style: .continuous))
     }
 }

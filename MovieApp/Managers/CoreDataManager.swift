@@ -2,18 +2,18 @@
 //  CoreDataManager.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
 import CoreData
 import SwiftUI
 
-class CoreDataProvider {
+class CoreDataManager {
     
     let persistentContainer: NSPersistentContainer
     
-    static let shared = CoreDataProvider()
+    static let shared = CoreDataManager()
     
     private init() {
         

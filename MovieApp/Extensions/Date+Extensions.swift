@@ -2,7 +2,7 @@
 //  Date+Extensions.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation

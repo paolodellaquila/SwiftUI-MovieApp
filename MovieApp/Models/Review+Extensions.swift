@@ -2,7 +2,7 @@
 //  Review+Extensions.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
@@ -16,9 +16,11 @@ extension Review: BaseModel {
         request.predicate = NSPredicate(format: "movie = %@", movieId)
         
         do {
-            return try CoreDataProvider.shared.viewContext.fetch(request)
+            return try viewContext.fetch(request)
         } catch {
             return [] 
         }
+        
     }
+    
 }

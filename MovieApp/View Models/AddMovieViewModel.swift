@@ -2,7 +2,7 @@
 //  AddMovieViewModel.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
@@ -22,7 +22,7 @@ class AddMovieViewModel: ObservableObject {
         movie.rating = Double(rating ?? 0)
         movie.releaseDate = releaseDate
         
-        movie.save()
+        try? movie.save() 
     }
     
 }

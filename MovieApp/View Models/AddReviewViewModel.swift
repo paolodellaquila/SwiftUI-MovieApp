@@ -2,7 +2,7 @@
 //  AddReviewViewModel.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
@@ -14,18 +14,15 @@ class AddReviewViewModel: ObservableObject {
     
     func addReviewForMovie(vm: MovieViewModel) {
         
-        let movie: Movie? = Movie.byId(id: vm.id)
-        if let movie = movie {
-            
-            let review = Review(context: Review.viewContext)
-            review.title = title
-            review.text = text
-            review.movie = movie
-            review.save()
-        }
+        let movie: Movie? = Movie.byId(id: vm.movieId)
         
-       
+        let review = Review(context: Movie.viewContext)
+        review.title = title
+        review.text = text
+        review.movie = movie
         
+        // save the review
+        try? review.save()
     }
     
 }

@@ -2,16 +2,15 @@
 //  BaseModel.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
 import CoreData
 
-
-protocol BaseModel where Self: NSManagedObject {
-    func save()
-    func delete()
+protocol BaseModel: NSManagedObject {
+    func save() throws
+    func delete() throws 
     static func byId<T: NSManagedObject>(id: NSManagedObjectID) -> T?
     static func all<T: NSManagedObject>() -> [T]
 }
@@ -19,21 +18,20 @@ protocol BaseModel where Self: NSManagedObject {
 extension BaseModel {
     
     static var viewContext: NSManagedObjectContext {
-        return CoreDataProvider.shared.viewContext
+        return CoreDataManager.shared.viewContext
     }
     
-    func save() {
+    func save() throws {
         do {
             try Self.viewContext.save()
         } catch {
-            Self.viewContext.rollback()
-            print(error)
+            throw error
         }
     }
     
-    func delete() {
+    func delete() throws {
         Self.viewContext.delete(self)
-        save()
+        try save() 
     }
     
     static func all<T>() -> [T] where T: NSManagedObject {
@@ -48,16 +46,12 @@ extension BaseModel {
     }
     
     static func byId<T>(id: NSManagedObjectID) -> T? where T: NSManagedObject {
-        
         do {
             return try viewContext.existingObject(with: id) as? T
         } catch {
             print(error)
             return nil
         }
-        
     }
     
 }
-
-

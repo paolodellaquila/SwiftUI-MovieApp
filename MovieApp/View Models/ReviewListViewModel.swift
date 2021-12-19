@@ -2,7 +2,7 @@
 //  ReviewListViewModel.swift
 //  MovieApp
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
 //
 
 import Foundation
@@ -14,10 +14,9 @@ class ReviewListViewModel: ObservableObject {
     
     func getReviewsByMovie(vm: MovieViewModel) {
         DispatchQueue.main.async {
-            self.reviews = Review.getReviewsByMovieId(movieId: vm.id).map(ReviewViewModel.init)
+            self.reviews = Review.getReviewsByMovieId(movieId: vm.movieId).map(ReviewViewModel.init)
         }
     }
-    
 }
 
 struct ReviewViewModel {

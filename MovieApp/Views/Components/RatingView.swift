@@ -2,7 +2,8 @@
 //  RatingView.swift
 //  SwiftUIRatings
 //
-//  Created by Francesco Paolo Dellaquila
+//  Created by Francesco Paolo Dellaquila.
+//  Copyright © 2021 Francesco Paolo Dellaquila. All rights reserved.
 //
 
 import SwiftUI
